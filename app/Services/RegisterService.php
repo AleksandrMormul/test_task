@@ -9,9 +9,11 @@ class RegisterService
 {
     /**
      * @param \App\Repositories\UserRepository $users
+     * @param \App\Services\UserLinkService $links
      */
     public function __construct(
-        protected UserRepository $users
+        protected UserRepository $users,
+        protected UserLinkService $links,
     ) {}
 
     /**
@@ -21,12 +23,15 @@ class RegisterService
      */
     public function register(array $data): User
     {
-        return \DB::transaction(function () use ($data) {
+        $user = \DB::transaction(function () use ($data) {
             return $this->users->create([
-                'username' => $data['username'],
+                'name' => $data['username'],
                 'phone' => $data['phone'],
             ]);
         });
 
+        $this->links->generate($user->id);
+
+        return $user;
     }
 }

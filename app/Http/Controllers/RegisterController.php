@@ -23,10 +23,16 @@ class RegisterController extends Controller
 
     /**
      * @param \App\Http\Requests\RegisterRequest $request
+     * @return \Illuminate\Http\RedirectResponse
      * @throws \Throwable
      */
-    public function register(RegisterRequest $request)
+    public function register(RegisterRequest $request): \Illuminate\Http\RedirectResponse
     {
         $user = $this->service->register($request->validated());
+        $link = $user->link()->first();
+
+        return redirect()
+            ->route('link.show', $link->link)
+            ->with('success', 'User registered successfully');
     }
 }
