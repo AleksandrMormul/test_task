@@ -28,13 +28,26 @@
                 </button>
             </form>
 
-            <button class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-                Imfeelinglucky
-            </button>
-
-            <button class="w-full bg-gray-700 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded">
-                History
-            </button>
+            <form method="POST" action="{{ route('game.feeling-lucky', ['token' => $link->link]) }}">
+                @csrf
+                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded w-full">
+                    ImFeelingLucky
+                </button>
+            </form>
+            <!-- Результат последней игры -->
+            @if(isset($game))
+                <div class="mt-4 p-4 bg-green-100 rounded">
+                    <p><strong>Random Number:</strong> {{ $game->game_result }}</p>
+                    <p><strong>Result:</strong> {{ $game->result }}</p>
+                    <p><strong>Win Amount:</strong> ${{ $game->win_amount }}</p>
+                </div>
+            @endif
+            <form method="POST" action="{{ route('game.history',  ['token' => $link->link]) }}">
+                @csrf
+                <button type="submit" class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded w-full mt-2">
+                    History
+                </button>
+            </form>
         </div>
     </div>
 </div>

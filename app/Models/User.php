@@ -47,8 +47,13 @@ class User extends Authenticatable
         ];
     }
 
-    public function link()
+    public function link(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(UserLink::class);
+    }
+
+    public function games()
+    {
+        return $this->hasMany(Game::class);
     }
 }
