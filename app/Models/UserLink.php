@@ -4,6 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property int $id
+ * @property int $user_id
+ * @property string $link
+ * @property \Carbon\Carbon $date_expire
+ */
 class UserLink extends Model
 {
     protected $fillable = [

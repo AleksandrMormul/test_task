@@ -28,10 +28,40 @@ class UserLinkController extends Controller
         return view('page-a', compact('link'));
     }
 
-    public function regenerate(int $userId)
+    /**
+     * @param string $token
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Throwable
+     */
+    public function regenerate(string $token): \Illuminate\Http\RedirectResponse
     {
-        $link = $this->service->generate($userId);
-        return redirect()->route('link.show', $link->link)
+        $link = $this->links->findByLink($token);
+
+        if ( ! $link) {
+            abort(404, 'Link not found');
+        }
+
+        $newLink = $this->service->generate($link->user_id);
+        return redirect()->route('link.show', $newLink->link)
             ->with('success', 'Link regenerated');
+    }
+
+    /**
+     * @param string $token
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Throwable
+     */
+    public function deactivate(string $token): \Illuminate\Http\RedirectResponse
+    {
+        $link = $this->links->findByLink($token);
+
+        if ( ! $link) {
+            abort(404, 'Link not found');
+        }
+
+        $this->service->deactivate($link);
+
+        return redirect()->route('register.form')
+            ->with('success', 'Link deactivated');
     }
 }

@@ -32,4 +32,15 @@ class UserLinkService
             return $this->links->upsert($userId, $token, $expire);
         });
     }
+
+    /**
+     * @param \App\Models\UserLink $link
+     * @throws \Throwable
+     */
+    public function deactivate(UserLink $link): void
+    {
+        \DB::transaction(function () use ($link) {
+            return $link->delete();
+        });
+    }
 }
